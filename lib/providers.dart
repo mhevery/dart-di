@@ -32,7 +32,13 @@ class _TypeProvider implements Provider {
       throw new NoProviderException(error('No implementation provided for ${formatSymbol(classMirror.simpleName)} typedef!'));
     }
 
-    MethodMirror ctor = classMirror.constructors.values.first;
+    MethodMirror ctor;
+    classMirror.constructors.forEach((key, value) {
+      var name = formatSymbol(key);
+      if (name.indexOf('.') == -1) {
+        ctor = value;
+      }
+    });
 
     resolveArgument(p) {
       return getInstanceBySymbol(p.type.simpleName);
